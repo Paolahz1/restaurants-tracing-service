@@ -1,14 +1,12 @@
 package com.foodcourt.tracing.infrastructure.input.rest;
 
+import com.foodcourt.tracing.application.dto.GetTracingByClientIdResponse;
 import com.foodcourt.tracing.application.dto.RecordEventCommand;
 import com.foodcourt.tracing.application.handler.IOrderTracingHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/tracing-service")
@@ -21,5 +19,11 @@ public class OrderTracingController {
     public ResponseEntity<Void> saveOrderTracing(@RequestBody RecordEventCommand command) {
         handler.recordEvent(command);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/{clientId}")
+    public ResponseEntity<GetTracingByClientIdResponse> getOrderTracing(@PathVariable long clientId) {
+        GetTracingByClientIdResponse response = handler.getTracing(clientId);
+        return ResponseEntity.ok(response);
     }
 }
