@@ -4,6 +4,9 @@ import com.foodcourt.tracing.domain.api.IRecordEventServicePort;
 import com.foodcourt.tracing.domain.model.OrderTracing;
 import com.foodcourt.tracing.domain.spi.IOrderTracingPersistencePort;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 public class RecordEventUseCase implements IRecordEventServicePort {
 
     private final IOrderTracingPersistencePort persistencePort;
@@ -14,6 +17,7 @@ public class RecordEventUseCase implements IRecordEventServicePort {
 
     @Override
     public void save(OrderTracing tracingEvent) {
+        tracingEvent.setTimestamp(Instant.now());
         persistencePort.save(tracingEvent);
     }
 

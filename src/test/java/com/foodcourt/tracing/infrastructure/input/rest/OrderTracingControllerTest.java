@@ -1,7 +1,6 @@
 package com.foodcourt.tracing.infrastructure.input.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.foodcourt.tracing.application.dto.GetTracingByClientIdResponse;
 import com.foodcourt.tracing.application.dto.RecordEventCommand;
 import com.foodcourt.tracing.application.handler.IOrderTracingHandler;
 import com.foodcourt.tracing.domain.model.OrderTracing;
@@ -68,23 +67,61 @@ class OrderTracingControllerTest {
                 .timestamp(Instant.now())
                 .build();
 
-        GetTracingByClientIdResponse response = GetTracingByClientIdResponse.builder()
-                .events(List.of(event1, event2))
-                .build();
 
-        when(handler.getTracing(clientId)).thenReturn(response);
+        when(handler.getTracing(clientId)).thenReturn(List.of(event1, event2));
 
         mockMvc.perform(
                         get("/tracing-service/{clientId}", clientId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.events[0].id").value("evt-1"))
-                .andExpect(jsonPath("$.events[0].clientId").value((int) clientId))
-                .andExpect(jsonPath("$.events[0].status").value("CREATED"))
-                .andExpect(jsonPath("$.events[1].id").value("evt-2"))
-                .andExpect(jsonPath("$.events[1].status").value("PREPARING"));
+                .andExpect(jsonPath("$[0].id").value("evt-1"))
+                .andExpect(jsonPath("$[0].clientId").value((int) clientId))
+                .andExpect(jsonPath("$[0].status").value("CREATED"))
+                .andExpect(jsonPath("$[1].id").value("evt-2"))
+                .andExpect(jsonPath("$[1].status").value("PREPARING"));
 
         verify(handler).getTracing(clientId);
+    }
+
+    @Test
+    void shouldGetOrderTracingByRestaurantId() throws Exception {
+        long restaurantId = 5L;
+
+        // Mock de la respuesta usando builder
+        OrderTracing event1 = OrderTracing.builder()
+                .id("evt-1")
+                .orderId(100L)
+                .clientId(1L)
+                .employeeId(10L)
+                .restaurantId(restaurantId)
+                .status("CREATED")
+                .timestamp(Instant.now())
+                .build();
+
+        OrderTracing event2 = OrderTracing.builder()
+                .id("evt-2")
+                .orderId(101L)
+                .clientId(2L)
+                .employeeId(11L)
+                .restaurantId(restaurantId)
+                .status("PREPARING")
+                .timestamp(Instant.now())
+                .build();
+
+        when(handler.getTracingForRestaurant(restaurantId)).thenReturn(List.of(event1, event2));
+
+        mockMvc.perform(
+                        get("/tracing-service/restaurant/{restaurantId}", restaurantId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value("evt-1"))
+                .andExpect(jsonPath("$[0].restaurantId").value((int) restaurantId))
+                .andExpect(jsonPath("$[0].status").value("CREATED"))
+                .andExpect(jsonPath("$[1].id").value("evt-2"))
+                .andExpect(jsonPath("$[1].status").value("PREPARING"));
+
+        verify(handler).getTracingForRestaurant(restaurantId);
     }
 }
