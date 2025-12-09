@@ -8,6 +8,6 @@ import java.util.List;
 public interface IOrderTracingHandler {
 
     void recordEvent(RecordEventCommand command);
-    List<OrderTracing> getTracing(Long orderId);
+    List<OrderTracing> getTracingForClientAndOrderId(Long clientId, Long orderId);
     List<OrderTracing> getTracingForRestaurant(Long restauId);
 }

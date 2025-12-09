@@ -34,12 +34,11 @@ public class OrderTracingMongoAdapter implements IOrderTracingPersistencePort {
     }
 
     @Override
-    public List<OrderTracing> findByClientId(Long clientId) {
-        return repository.findByClientId(clientId)
-                .stream()
-                .map(mapper::toDomain)
-                .toList();
+    public List<OrderTracing> findByClientIdAndOrderId(Long clientId, Long orderId) {
+        List<OrderTracingEntity> entities = repository.findByClientIdAndOrderId(clientId, orderId);
+        return entities.stream().map(mapper::toDomain).toList();
     }
+
 
     @Override
     public List<OrderTracing> findByRestaurantId(Long restaurantId) {

@@ -5,11 +5,11 @@ import com.foodcourt.tracing.domain.model.OrderTracing;
 import java.util.List;
 
 /**
- * Devuelve todos los eventos de todos los pedidos de un cliente.
+ * Devuelve todos los eventos de un pedido de un cliente.
  */
 
 public interface IGetTracingByClientIdServicePort {
 
-    List<OrderTracing> getTracingForClient(Long clientId);
+    List<OrderTracing> getTracingForClient(Long clientId, Long orderId);
 
 }

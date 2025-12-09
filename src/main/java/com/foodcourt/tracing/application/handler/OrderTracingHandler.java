@@ -29,9 +29,10 @@ public class OrderTracingHandler implements IOrderTracingHandler{
     }
 
     @Override
-    public List<OrderTracing> getTracing(Long clientId) {
-        return getTracingForClientServicePort.getTracingForClient(clientId);
+    public List<OrderTracing> getTracingForClientAndOrderId(Long clientId, Long orderId) {
+        return getTracingForClientServicePort.getTracingForClient(clientId, orderId);
     }
+
 
     @Override
     public List<OrderTracing> getTracingForRestaurant(Long restauId) {

@@ -16,7 +16,8 @@ public class GetTracingByRestaurantUseCase implements IGetTracingByRestaurantSer
 
     @Override
     public List<OrderTracing> getTracingForRestaurant(Long restaurantId) {
-        return tracingPersistencePort.findByRestaurantId(restaurantId);
+        List<OrderTracing> orderTracingList = tracingPersistencePort.findByRestaurantId(restaurantId);
+        return orderTracingList != null ? orderTracingList : List.of();
     }
 
 

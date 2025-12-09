@@ -53,42 +53,41 @@ class OrderTracingControllerTest {
     @Test
     void shouldGetOrderTracing() throws Exception {
         long clientId = 1L;
+        long orderId = 1l;
 
-        // Mock de la respuesta usando builder
         OrderTracing event1 = OrderTracing.builder().id("evt-1").orderId(100L)
-                .clientId(clientId).employeeId(10L)
-                .restaurantId(5L).status("CREATED")
+                .clientId(clientId)
+                .restaurantId(5L).status("PENDING")
                 .timestamp(Instant.now())
                 .build();
 
-        OrderTracing event2 = OrderTracing.builder().id("evt-2").orderId(101L)
+        OrderTracing event2 = OrderTracing.builder().id("evt-1").orderId(101L)
                 .clientId(clientId).employeeId(11L)
-                .restaurantId(5L).status("PREPARING")
+                .restaurantId(5L).status("READY")
                 .timestamp(Instant.now())
                 .build();
 
 
-        when(handler.getTracing(clientId)).thenReturn(List.of(event1, event2));
+        when(handler.getTracingForClientAndOrderId(clientId, orderId)).thenReturn(List.of(event1, event2));
 
         mockMvc.perform(
-                        get("/tracing-service/{clientId}", clientId)
+                        get("/tracing-service/client/{clientId}/order/{orderId}", clientId, orderId)
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("evt-1"))
                 .andExpect(jsonPath("$[0].clientId").value((int) clientId))
-                .andExpect(jsonPath("$[0].status").value("CREATED"))
-                .andExpect(jsonPath("$[1].id").value("evt-2"))
-                .andExpect(jsonPath("$[1].status").value("PREPARING"));
+                .andExpect(jsonPath("$[0].status").value("PENDING"))
+                .andExpect(jsonPath("$[1].id").value("evt-1"))
+                .andExpect(jsonPath("$[1].status").value("READY"));
 
-        verify(handler).getTracing(clientId);
+        verify(handler).getTracingForClientAndOrderId(clientId, orderId);
     }
 
     @Test
     void shouldGetOrderTracingByRestaurantId() throws Exception {
         long restaurantId = 5L;
 
-        // Mock de la respuesta usando builder
         OrderTracing event1 = OrderTracing.builder()
                 .id("evt-1")
                 .orderId(100L)

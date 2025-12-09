@@ -5,7 +5,7 @@ import com.foodcourt.tracing.domain.model.OrderTracing;
 import com.foodcourt.tracing.domain.spi.IOrderTracingPersistencePort;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
+
 
 public class RecordEventUseCase implements IRecordEventServicePort {
 
