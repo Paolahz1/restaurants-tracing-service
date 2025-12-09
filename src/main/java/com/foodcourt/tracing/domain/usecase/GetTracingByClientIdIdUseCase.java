@@ -15,8 +15,8 @@ public class GetTracingByClientIdIdUseCase implements IGetTracingByClientIdServi
     }
 
     @Override
-    public List<OrderTracing> getTracingForClient(Long orderId) {
-        return persistencePort.findByClientId(orderId);
+    public List<OrderTracing> getTracingForClient(Long clientId, Long orderId) {
+        List<OrderTracing> tracingList = persistencePort.findByClientIdAndOrderId(clientId, orderId);
+        return tracingList != null ? tracingList : List.of();
     }
-
 }

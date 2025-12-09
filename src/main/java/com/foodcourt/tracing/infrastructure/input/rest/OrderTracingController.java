@@ -23,13 +23,13 @@ public class OrderTracingController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/client/{clientId}")
-    public ResponseEntity<List<OrderTracing>> getOrderTracing(@PathVariable long clientId) {
-        return ResponseEntity.ok(handler.getTracing(clientId));
+    @GetMapping("/client/{clientId}/order/{orderId}")
+    public ResponseEntity<List<OrderTracing>> getOrderTracingByClientAndOrder(@PathVariable Long clientId, @PathVariable Long orderId) {
+        return ResponseEntity.ok(handler.getTracingForClientAndOrderId(clientId, orderId));
     }
 
     @GetMapping("/restaurant/{restaurantId}")
-    public ResponseEntity<List<OrderTracing>> getOrderTracingForRestaurant(@PathVariable long restaurantId) {
+    public ResponseEntity<List<OrderTracing>> getOrderTracingForRestaurant(@PathVariable Long restaurantId) {
         return ResponseEntity.ok(handler.getTracingForRestaurant(restaurantId));
     }
 

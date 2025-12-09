@@ -10,7 +10,7 @@ public interface IOrderTracingPersistencePort {
 
     List<OrderTracing> findByOrderId(Long orderId);
 
-    List<OrderTracing> findByClientId(Long clientId);
+    List<OrderTracing> findByClientIdAndOrderId(Long clientId, Long orderId);
 
     List<OrderTracing> findByRestaurantId(Long restaurantId);
 

@@ -9,7 +9,7 @@ public interface IOrderTracingMongoRepository extends MongoRepository<OrderTraci
 
     List<OrderTracingEntity> findByOrderId(Long orderId);
 
-    List<OrderTracingEntity> findByClientId(Long clientId);
-
     List<OrderTracingEntity> findByRestaurantId(Long restaurantId);
+
+    List<OrderTracingEntity> findByClientIdAndOrderId(Long clientId, Long orderId);
 }
